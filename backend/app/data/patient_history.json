@@ -1,0 +1,13 @@
+{
+  "patient_id": "P001",
+  "history": [
+    {
+      "date": "2024-11-12",
+      "note": "Patient diagnosed with Type 2 Diabetes. Prescribed Metformin 500mg daily."
+    },
+    {
+      "date": "2025-01-20",
+      "note": "Chest X-ray showed mild right lower lobe opacity."
+    }
+  ]
+}
