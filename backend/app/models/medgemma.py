@@ -1,28 +1,18 @@
-# backend/app/models/medgemma.py
+from huggingface_hub import InferenceClient
+import os
 
-def medgemma_generate(prompt: str) -> str:
-    """
-    Temporary stub for MedGemma.
-    This will be replaced with the real MedGemma inference call.
-    """
+client = InferenceClient(
+    model="meta-llama/Llama-3.2-3B-Instruct",
+    token=os.environ["HUGGINGFACEHUB_API_TOKEN"],
+)
 
-    # VERY SIMPLE MOCK OUTPUT
-    return f"""
-SOAP NOTE (Mocked Output)
-
-Subjective:
-Patient reports symptoms as described in the transcript.
-
-Objective:
-Findings based on provided imaging and observations.
-
-Assessment:
-Clinical assessment pending further verification.
-
-Plan:
-Recommend follow-up and additional tests if required.
-
----
-MODEL PROMPT USED:
-{prompt[:300]}...
-"""
+def medgemma_generate(prompt: str, max_tokens: int = 512) -> str:
+    response = client.chat_completion(
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=max_tokens,
+        temperature=0.2,
+        top_p=0.9,
+    )
+    return response.choices[0].message.content

@@ -1,13 +1,16 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, UploadFile, File
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import json
+import shutil
+from pathlib import Path
 from typing import List
 from sqlmodel import Session, select
 from app.graph.graph import app as langgraph_app
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.session import init_db, get_session
 from app.db.models import Session as DBSession
+from app.models.kaggle_adapter import load_kaggle_output
 
 app = FastAPI(title="MediGuard Backend")
 
@@ -144,17 +147,61 @@ def get_session_by_id(session_id: str, db: Session = Depends(get_session)):
         return {"error": "Session not found"}
     return session
 
-@app.get("/sessions")
-def get_sessions(db: Session = Depends(get_session)):
-    """Get all past sessions"""
-    statement = select(DBSession).order_by(DBSession.timestamp.desc())
-    sessions = db.exec(statement).all()
-    return sessions
+@app.get("/kaggle-case")
+def get_kaggle_case():
+    """Get the current case data from Kaggle output"""
+    try:
+        data = load_kaggle_output()
+        return {
+            "transcript": data["input"]["transcript"],
+            "image_findings": data["input"]["image_findings"],
+            "session_id": data["session_id"],
+            "timestamp": data["timestamp"],
+            "model_metadata": data["model_metadata"],
+            "performance": data["performance"]
+        }
+    except FileNotFoundError:
+        return {"error": "No Kaggle output file found. Please upload mediguard_output.json from Kaggle"}
 
-@app.get("/sessions/{session_id}")
-def get_session_by_id(session_id: str, db: Session = Depends(get_session)):
-    """Get a specific session by ID"""
-    session = db.get(DBSession, session_id)
-    if not session:
-        return {"error": "Session not found"}
-    return session
+@app.post("/upload-kaggle-json")
+async def upload_kaggle_json(file: UploadFile = File(...)):
+    """Upload Kaggle output JSON file"""
+    try:
+        # Validate file is JSON
+        if not file.filename.endswith('.json'):
+            return {"error": "File must be a JSON file"}
+        
+        # Read and validate JSON structure
+        content = await file.read()
+        data = json.loads(content)
+        
+        # Validate required fields
+        required_fields = ["input", "agents", "model_metadata"]
+        if not all(field in data for field in required_fields):
+            return {"error": "Invalid Kaggle output format. Missing required fields."}
+        
+        # Save to data directory
+        data_dir = Path(__file__).parent / "data"
+        data_dir.mkdir(exist_ok=True)
+        output_path = data_dir / "mediguard_output.json"
+        
+        with open(output_path, "w") as f:
+            json.dump(data, f, indent=2)
+        
+        # Return the loaded case data
+        return {
+            "success": True,
+            "message": "Kaggle output uploaded successfully",
+            "data": {
+                "transcript": data["input"]["transcript"],
+                "image_findings": data["input"]["image_findings"],
+                "session_id": data.get("session_id", "uploaded"),
+                "timestamp": data.get("timestamp", ""),
+                "model_metadata": data.get("model_metadata", {}),
+                "performance": data.get("performance", {})
+            }
+        }
+    except json.JSONDecodeError:
+        return {"error": "Invalid JSON file"}
+    except Exception as e:
+        return {"error": f"Failed to upload file: {str(e)}"}

@@ -1,0 +1,38 @@
+{
+  "session_id": "sample-test-123",
+  "timestamp": "2026-02-17T10:00:00.000000+00:00",
+  "input": {
+    "transcript": "Patient reports persistent cough for 5 days with shortness of breath.",
+    "image_findings": "Chest X-ray shows mild opacity in the right lower lobe."
+  },
+  "agents": {
+    "scribe": {
+      "draft_note": "**SOAP Note**\n\n**Subjective (S):**\n* Chief Complaint: Patient reports persistent cough for 5 days with associated shortness of breath.\n* History of Present Illness: Patient is presenting with a 5-day history of persistent cough. The cough has been accompanied by increasing shortness of breath. Patient denies fever, chest pain, or hemoptysis.\n\n**Objective (O):**\n* Chest X-ray: Mild opacity noted in the right lower lobe, suggestive of possible infiltrate.\n* Vital signs: Within normal limits (assumed from available data)\n\n**Assessment (A):**\n* Likely community-acquired pneumonia, right lower lobe\n* Differential: Bronchitis, early viral pneumonia\n\n**Plan (P):**\n* Prescribe appropriate antibiotic therapy\n* Follow-up chest X-ray in 2-3 weeks\n* Return precautions discussed\n* Patient education on pneumonia management",
+      "inference_time_seconds": 38.5
+    },
+    "guard": {
+      "confidence_score": 0.92,
+      "hallucination_risk": false,
+      "reasoning": "SOAP note accurately reflects the provided transcript and imaging findings. All documented symptoms are present in the original transcript. The assessment is appropriately based on the clinical presentation and X-ray findings.",
+      "inference_time_seconds": 12.3
+    },
+    "threat": {
+      "clinical_threats": [
+        {"condition": "Possible pneumonia", "severity": "moderate"},
+        {"condition": "Respiratory distress", "severity": "moderate"}
+      ],
+      "inference_time_seconds": 10.8
+    }
+  },
+  "performance": {
+    "total_inference_time_seconds": 61.6,
+    "gpu_memory_gb": 8.18
+  },
+  "model_metadata": {
+    "llm": "google/medgemma-1.5-4b-it",
+    "environment": "kaggle-gpu-t4",
+    "seed": 42,
+    "max_tokens_soap": 1024,
+    "deterministic": true
+  }
+}

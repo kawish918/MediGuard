@@ -1,4 +1,56 @@
+# Python
 venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Environment
 .env
+.env.local
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build
+frontend/my-app/dist/
+frontend/my-app/.vite/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated data
+backend/app/data/mediguard_output.json
+backend/app/data/patient_history.json
+backend/app/data/test_*.png
+backend/app/data/test_*.jpg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+VIDEO_SCRIPT.md
+UPDATED_WORKFLOW.md
+PROJECT_DESCRIPTION.txt
+COMPETITION_WRITEUP.md
