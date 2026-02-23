@@ -1,6 +1,5 @@
 # 🏥 MediGuard: AI-Powered Clinical Documentation with Agentic Safety Verification
 
-[![Google HAI-DEF Competition 2026](https://img.shields.io/badge/Google%20HAI--DEF-Competition%202026-4285F4?style=for-the-badge&logo=google)](https://www.kaggle.com/competitions/hai-def)
 [![MedGemma](https://img.shields.io/badge/Model-MedGemma%201.5%204B-34A853?style=for-the-badge)](https://huggingface.co/google/medgemma-1.5-4b-it)
 [![MedSigLIP](https://img.shields.io/badge/Vision-MedSigLIP%20448-EA4335?style=for-the-badge)](https://huggingface.co/google/medsiglip-448)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
@@ -13,8 +12,6 @@ MediGuard is an intelligent clinical documentation system that uses **three spec
 ## ⚡ Quick Start
 
 ### 1️⃣ Run the Kaggle Notebook
-
-[![Open in Kaggle](https://img.shields.io/badge/Open%20in-Kaggle-20BEFF?style=for-the-badge&logo=kaggle)](YOUR_KAGGLE_NOTEBOOK_LINK)
 
 - Upload `mediguard-hai-def-updated.ipynb` to Kaggle
 - Enable **T4 GPU**
